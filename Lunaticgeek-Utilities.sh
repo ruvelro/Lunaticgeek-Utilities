@@ -11,7 +11,7 @@ echo "$user"
 
 echo '              ______________________________ '
 echo '             |     Lunaticgeek Utilities    |'
-echo '             |          V. 13.04.01         |'
+echo '             |          V. 13.04.02         |'
 echo '             |          by. ruvelro         |'
 echo '             |______www.lunaticgeek.com_____|'
 echo ''
@@ -23,7 +23,7 @@ echo ''
 
 #
 # Variables Locales
-TFCName="Lunaticgeek Utilities 13.04.01"
+TFCName="Lunaticgeek Utilities 13.04.02"
 TFCVersion="13.04.01"
 LogDay=$(date '+%Y-%m-%d')
 LogTime=$(date '+%Y-%m-%d %H:%M:%S')
@@ -135,6 +135,7 @@ TRUE "Qpxtool" "Analizador de lectores opticos" \
 TRUE "Qtnx" "Probar aplicaciones sin instalar desde la Store" \
 TRUE "Byobu *" "Terminal multiventana" \
 TRUE "Ubuntu-Tweak *" "Configurador del sistema" \
+TRUE "Unsettings *" "Confiogurador del sistema" \
 TRUE "Wine *" "Emulador de Windows" \
 TRUE "Indicator-Multiload *" "Widget que muestra el uso del PC" \
 TRUE "Nautilus-Actions-Extra *" "Acciones extra para el menu contextual" \
@@ -148,7 +149,10 @@ TRUE "AcetoneISO" "Montador de imagenes ISO" \
 TRUE "Isomaster" "Gestor de imagenes ISO" \
 TRUE "Wallch" "Cambia el fondo automáticamente" \
 TRUE "Screenlets" "Widgets de escritorio" \
-TRUE "Classicmenu-Indicator" "Menu clasido de Gnome en el panel de Unity" \
+TRUE "Classicmenu-Indicator" "Menu clasico de Gnome en el panel de Unity" \
+TRUE "UFW" "Firewall para Ubuntu" \
+TRUE "Java" "Version OpenJDK"
+TRUE "Hardinfo" "Información del sistema" \
 TRUE "VirtualBox-4.1" "Maquinas virtuales (En pruebas)" \
 TRUE "VirtualBox-4.2" "Maquinas virtuales (En pruebas)" \
 FALSE "." "." \
@@ -170,6 +174,10 @@ TRUE "Pidgin" "Multimensajeria" \
 TRUE "Amule" "Version de eMule para Linux" \
 TRUE "Elinks" "Navegador web para terminal" \
 TRUE "Slurm" "Monitor de red" \
+TRUE "Iptraf" "Monitor de red avanzado" \
+TRUE "UFW" "Firewall para Ubuntu" \
+TRUE "TCPtrack" "Sniffer de paquetes TCP" \
+TRUE "Nmap" "Scanner de puertos" \
 FALSE "." "." \
 FALSE "***PROGRAMAS DE AUDIO/VIDEO/IMAGEN***" "Selecciona los progranas que desees" \
 TRUE "VLC" "Reproductor" \
@@ -194,11 +202,11 @@ TRUE "Gnome-Paint" "Programa similar al paint" \
 TRUE "Darktable *" "Procesador de imágenes" \
 TRUE "Gnome-Recorder" "Grabador de escritorio" \
 TRUE "Mplayer" "Reproductor de video" \
-TRUE "UFW" "Firewall para Ubuntu" \
 TRUE "Winff" "Conversor de vídeo" \
 TRUE "Transmageddon" "Conversor de video" \
 TRUE "Shutter" "Aplicación de pantallazos" \
 TRUE "Cheese" "Programa para webcam" \
+TRUE "Mixxx *" "Mezclador de audio" \
 FALSE "." "." \
 FALSE "***JUEGOS***" "Selecciona los progranas que desees" \
 TRUE "Steam *" "Platforma de juego" \
@@ -221,7 +229,10 @@ TRUE "GScan2PDF" "Programa de escaner" \
 TRUE "Calibre" "Catalogador de ebooks" \
 TRUE "Emacs" "Editor de textos profesional" \
 TRUE "Basket" "Administrador de notas" \
+TRUE "Tomboy" "Administrador de notas" \
+TRUE "Knotes" "Administrador de notas" \
 TRUE "Geany" "Editor de textos" \
+TRUE "Bluefish" "IDE de programación" \
 --separator=","); 
 
 
@@ -5692,6 +5703,539 @@ sudo apt-get -y -f install 2>&1 | zenity --progress --title="RW Labs - $TFCName"
            echo "# $progressBarVal% completado. $taskNum of $installCount - Classicmenu Indicator instalado."  
            taskNum=$(expr $taskNum + 1 )
         fi
+        
+        # 10. Instalar Iptraf
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Iptraf")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "iptraf" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Iptraf"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Iptraf instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Iptraf" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Iptraf"  
+           # Añadir repositorio de Iptraf PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Iptraf PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Iptraf
+           sudo apt-get install -y iptraf 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Iptraf ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Iptraf ..."
+           installStatus=$( FINSTALLED "iptraf" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Iptraf"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "iptraf"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Iptraf"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Iptraf instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar TCPtrack
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "TCPtrack")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "tcptrack" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "TCPtrack"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  TCPtrack instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar TCPtrack" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar TCPtrack"  
+           # Añadir repositorio de TCPtrack PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo TCPtrack PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar TCPtrack
+           sudo apt-get install -y tcptrack 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando TCPtrack ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de TCPtrack ..."
+           installStatus=$( FINSTALLED "tcptrack" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "TCPtrack"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "tcptrack"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "TCPtrack"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - TCPtrack instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Nmap
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Nmap")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "nmap" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Nmap"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Nmap instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Nmap" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Nmap"  
+           # Añadir repositorio de Nmap PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Nmap PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Nmap
+           sudo apt-get install -y nmap 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Nmap ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Nmap ..."
+           installStatus=$( FINSTALLED "nmap" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Nmap"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "nmap"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Nmap"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Nmap instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Bluefish
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Bluefish")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "bluefish" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Bluefish"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Bluefish instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Bluefish" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Bluefish"  
+           # Añadir repositorio de Bluefish PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Bluefish PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Bluefish
+           sudo apt-get install -y bluefish 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Bluefish ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Bluefish ..."
+           installStatus=$( FINSTALLED "bluefish" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Bluefish"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "bluefish"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Bluefish"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Bluefish instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Hardinfo
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Hardinfo")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "hardinfo" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Hardinfo"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Hardinfo instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Hardinfo" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Hardinfo"  
+           # Añadir repositorio de Hardinfo PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Hardinfo PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Hardinfo
+           sudo apt-get install -y hardinfo 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Hardinfo ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Hardinfo ..."
+           installStatus=$( FINSTALLED "hardinfo" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Hardinfo"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "hardinfo"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Hardinfo"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Hardinfo instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Java
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Java")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "openjdk-7-jdk" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Java"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Java instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Java" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Java"  
+           # Añadir repositorio de Java PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Java PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Java
+           sudo apt-get install -y openjdk-7-jdk openjdk-7-jre sudo apt-get install icedtea-7-plugin 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Java ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Java ..."
+           installStatus=$( FINSTALLED "openjdk-7-jdk" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Java"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "openjdk-7-jdk"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Java"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Java instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Unsettings
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Unsettings")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "unsettings" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Unsettings"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Unsettings instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Unsettings" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Unsettings"  
+           # Añadir repositorio de Unsettings PPA  
+           sudo add-apt-repository -y ppa:diesch/testing 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Unsettings PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Unsettings
+           sudo apt-get install -y unsettings 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Unsettings ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Unsettings ..."
+           installStatus=$( FINSTALLED "unsettings" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Unsettings"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "unsettings"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Unsettings"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Unsettings instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Tomboy
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Tomboy")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "tomboy" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Tomboy"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Tomboy instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Tomboy" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Tomboy"  
+           # Añadir repositorio de Tomboy PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Tomboy PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Tomboy
+           sudo apt-get install -y tomboy 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Tomboy ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Tomboy ..."
+           installStatus=$( FINSTALLED "tomboy" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Tomboy"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "tomboy"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Tomboy"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Tomboy instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Knotes
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Knotes")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "[paquete]" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Knotes"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Knotes instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Knotes" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Knotes"  
+           # Añadir repositorio de Knotes PPA  
+           #sudo add-apt-repository -y [PPA] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Knotes PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           #sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Knotes
+           sudo apt-get install -y [paquete] 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Knotes ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Knotes ..."
+           installStatus=$( FINSTALLED "[paquete]" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Knotes"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "[paquete]"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Knotes"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Knotes instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+        
+        # 10. Instalar Mixxx
+    echo "$progressBarVal" ; sleep 0.1
+       option=$(echo $selection | grep -c "Mixxx")
+       # Comprobar si está seleccionada 
+       if [ "$option" -eq "1" ] 
+         then
+           # Comprobar si el programa está instalado
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Comprobando software instalado"
+           installStatus=$( FINSTALLED "mixxx" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               FINSTALLOK "Mixxx"
+               # Actualizar la barra de progreso 
+               progressBarVal=$(expr $progressBarVal + $counterInc )  
+               echo "# $progressBarVal% completado. $taskNum of $installCount -  Mixxx instalado"  
+               taskNum=$(expr $taskNum + 1 )
+           fi
+       fi
+       # Si está seleccionado y no instalado, continuar    
+       if [ "$option" -eq "1" ] && [ "$installStatus" = "false" ]   
+         then
+           echo "$LogTime uss: [$userName] 10. Instalar Mixxx" >> $logFile
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Instalar Mixxx"  
+           # Añadir repositorio de Mixxx PPA  
+           sudo add-apt-repository -y sudo add-apt-repository ppa:mixxx/mixxx 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Añadiendo Mixxx PPA ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Actualizar Repositorios
+           sudo apt-get --quiet update 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Actualizando el Centro de Software ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+           # Instalar Mixxx
+           sudo apt-get install -y mixxx libportaudio2 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, About \3/' | zenity --progress --title="RW Labs - $TFCName" --text="<big><b>Instalando Mixxx ...</b></big>" --width=500 --pulsate --no-cancel --auto-close
+
+           # Comprobar si el programa se ha instalado bien
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Verificando la instalación de Mixxx ..."
+           installStatus=$( FINSTALLED "mixxx" )
+           if [ "$installStatus" = "true" ] 
+             then
+               # Instalación correcta, añadir a la lista de correctos
+               echo "$LogTime uss: [$userName] [OK] Instalación exitosa" >> $logFile
+               FINSTALLOK "Mixxx"
+               # Añadir icono al escritorio y/o sidebar
+               FADDLAUNCHER "mixxx"
+             else
+               # Instalación erronea, añadir a la lista de error
+               echo "$LogTime uss: [$userName] [ERROR] Instalación erronea" >> $logFile
+               FINSTALLERR "Mixxx"
+           fi
+
+           # Actualizar barra de progreso al finalizar
+           progressBarVal=$(expr $progressBarVal + $counterInc )  
+           echo "# $progressBarVal% completado. $taskNum of $installCount - Mixxx instalado."  
+           taskNum=$(expr $taskNum + 1 )
+        fi
+
+
+
         
 #####
 #####
